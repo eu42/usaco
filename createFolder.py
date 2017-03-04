@@ -9,6 +9,9 @@ usrname = 'erkam.u1'
 lang = 'C++'
 problemName = input('enter the problem name:')
 
+if problemName == '':
+	sys.exit('no problem name is given')
+
 initialComment = """\"/*
 	ID: {id}
 	PROG: {prog}
@@ -30,14 +33,25 @@ int main() {{
     return 0;
 }}\"""".format(id=usrname, prog=problemName, lang=lang)
 
-if problemName == '':
-	sys.exit('no problem name is given')
+makefile = (
+"""\"
+SHELL := /bin/bash
+all: make check
+make: {file}.cpp
+	g++ {file}.cpp
+run: a.out
+	bash -c "./a.out"
+check: expected.out {file}.out
+	bash -c \\\"comm expected.out {file}.out\\\"\"""".format(file=problemName))
 
 createFolder = "mkdir " + problemName
 subprocess.run(createFolder, shell=True, check=True)
 
-createFiles = "touch {name}/{name}.in {name}/{name}.out {name}/{name}.cpp".format(name=problemName)
+createFiles = "touch {name}/Makefile {name}/{name}.in {name}/{name}.out {name}/{name}.cpp {name}/expected.out".format(name=problemName)
 subprocess.run(createFiles, shell=True, check=True)
 
 initializeCode = "echo {comment} >> {name}/{name}.cpp".format(comment=initialComment, name=problemName)
 subprocess.run(initializeCode, shell=True, check=True)
+
+initializeMakefile = "echo {code} >> {name}/Makefile".format(code=makefile, name=problemName)
+subprocess.run(initializeMakefile, shell=True, check=True)
