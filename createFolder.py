@@ -9,7 +9,26 @@ usrname = 'erkam.u1'
 lang = 'C++'
 problemName = input('enter the problem name:')
 
-initialComment = "\"/*\n\tID: {id}\n\tPROG: {prog}\n\tLANG: {lang}\n*/\"".format(id=usrname, prog=problemName, lang=lang)
+initialComment = """\"/*
+	ID: {id}
+	PROG: {prog}
+	LANG: {lang}
+*/
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int main() {{
+    ofstream fout (\\\"{prog}.out\\\");
+    ifstream fin (\\\"{prog}.in\\\");
+    string result;
+    int a, b;
+    fin >> a >> b;
+    fout << result << endl;
+    return 0;
+}}\"""".format(id=usrname, prog=problemName, lang=lang)
 
 if problemName == '':
 	sys.exit('no problem name is given')
@@ -22,6 +41,3 @@ subprocess.run(createFiles, shell=True, check=True)
 
 initializeCode = "echo {comment} >> {name}/{name}.cpp".format(comment=initialComment, name=problemName)
 subprocess.run(initializeCode, shell=True, check=True)
-
-
-
