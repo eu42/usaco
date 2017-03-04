@@ -52,36 +52,37 @@ int main() {
     int len = necklace.length();
 
     int length = 0;
-    for (int i = 0; i < len; ++i)
+    char type = necklace[0];
+    for (int j = 0; j < len; ++j)
     {
-        length = 0;
-        changed = 0;
-        char type = necklace[i];
-        for (int j = i; j < i + len/2 && j < len; ++j)
-        {
-            // consider w as joker
-            if(necklace[j] == 'w'){
-                length++;
-            }
-            else if(changed == 0){
-                type = necklace[j];
-                changed++;
-                length++;
-            }
-            else if(type == necklace[j]){
-                length++;
-            }
-            // bead type can change at most 2 times in a substring
-            else if(type != necklace[j] && changed == 1){
-                type = necklace[j];
-                changed++;
-                length++;
-            }
-            else{
-                break;
-            }
+        // consider w as joker
+        if(necklace[j] == 'w'){
+            length++;
         }
-        if(longest < length){
+        else if(changed == 0){
+            type = necklace[j];
+            changed++;
+            length++;
+        }
+        else if(type == necklace[j]){
+            length++;
+        }
+        // bead type can change at most 2 times in a substring
+        else if(type != necklace[j] && changed == 1){
+            type = necklace[j];
+            changed++;
+            length++;
+        }
+        else{
+            if(length <= len/2 && longest < length){
+                longest = length;
+            }
+            // reset counters
+            length = 0;
+            changed = 0;
+            type = necklace[j];
+        }
+        if(length <= len/2 && longest < length){
             longest = length;
         }
     }
